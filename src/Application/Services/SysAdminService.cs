@@ -17,7 +17,7 @@ public class SysAdminService : ISysAdminService
 
     public SysAdmin Create(SysAdminCreateRequest request)
 {
-    var newSysAdmin = new SysAdmin(request.Name, request.Email, request.Password);
+    var newSysAdmin = new SysAdmin(request.Name, request.LastName,request.Email, request.Password);
     _sysAdminRepository.Create(newSysAdmin); 
     return newSysAdmin; 
 }
@@ -29,7 +29,7 @@ public class SysAdminService : ISysAdminService
         if(sysAdmin != null) 
         {
             sysAdmin.Name = request.Name;
-            sysAdmin.Lastname = request.LastName;
+            sysAdmin.LastName = request.LastName;
             sysAdmin.Email = request.Email;
 
             _sysAdminRepository.Update(sysAdmin);
@@ -47,7 +47,7 @@ public class SysAdminService : ISysAdminService
                 { 
                     Id = sysAdmin.Id,
                     Name = sysAdmin.Name,
-                    LastName = sysAdmin.Lastname,
+                    LastName = sysAdmin.LastName,
                     Email = sysAdmin.Email,
                 };
         }

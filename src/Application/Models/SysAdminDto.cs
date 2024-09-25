@@ -15,7 +15,7 @@ public class SysAdminDto
 		return new SysAdminDto
 		{ Id = sysAdmin.Id,
 		Name = sysAdmin.Name,
-		LastName = sysAdmin.Lastname,
+		LastName = sysAdmin.LastName,
 		Email = sysAdmin.Email,
 		Username = sysAdmin.Username,
 		};

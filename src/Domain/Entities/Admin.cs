@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Domain.Entites;
+namespace Domain.Entities;
 
 public class Admin : User
 {
