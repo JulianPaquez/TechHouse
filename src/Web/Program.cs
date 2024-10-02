@@ -19,7 +19,8 @@ using System.Text;
 using Infrastructure;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
-using Infrastructure.Data;
+using Infrastructure.Repositories;
+using Microsoft.Data.Sqlite;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,7 +44,17 @@ builder.Services.AddScoped<ISysAdminRepository, SysAdminRepository>();
 
 #endregion
 
-builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite("Data source = TechHouse.sln"));
+var connection = new SqliteConnection("Data source = DB-TechHouse.db");
+connection.Open();
+
+using (var command = connection.CreateCommand())
+{
+    command.CommandText = "PRAGMA journal_mode = DELETE;";
+    command.ExecuteNonQuery();
+}
+
+builder.Services.AddDbContext<ApplicationContext>(options =>
+    options.UseSqlite(connection, b => b.MigrationsAssembly("Infrastructure")));
 
 var app = builder.Build();
 
