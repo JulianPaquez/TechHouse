@@ -3,11 +3,17 @@ namespace Domain.Entities;
 public class SysAdmin : User
 
 {
-    public SysAdmin(string name,string lastName, string username, string password) 
+    public SysAdmin()
+    {
+         UserType = "SysAdmin";
+    }
+    public SysAdmin(string name,string lastName, string email,string password,string username) 
     {
         Name = name;
         LastName = lastName;
-        Username = username;
+        Email = email;
         Password = password;
+        Username = username;
+        UserType = "SysAdmin";
     }
 }

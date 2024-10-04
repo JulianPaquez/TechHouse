@@ -8,7 +8,7 @@ public class SysAdminDto
 	public string Name { get; set; }
 	public string LastName { get; set; }
 	public string Email { get; set; }
-	public string Username { get; set; }
+
 
 	public static SysAdminDto Create(SysAdmin sysAdmin)
 	{
@@ -17,7 +17,9 @@ public class SysAdminDto
 		Name = sysAdmin.Name,
 		LastName = sysAdmin.LastName,
 		Email = sysAdmin.Email,
-		Username = sysAdmin.Username,
+		
+		
+		
 		};
 	}
 

@@ -16,11 +16,15 @@ public class SysAdminService : ISysAdminService
     }
 
     public SysAdmin Create(SysAdminCreateRequest request)
-{
-    var newSysAdmin = new SysAdmin(request.Name, request.LastName,request.Email, request.Password);
-    _sysAdminRepository.Create(newSysAdmin); 
-    return newSysAdmin; 
-}
+    {
+        var newSysAdmin = new SysAdmin(request.Name, request.LastName, request.Email, request.Password, request.Username);
+
+        // Crea el SysAdmin en el repositorio
+        _sysAdminRepository.Create(newSysAdmin); 
+    
+        // Devuelve el SysAdmin creado
+        return newSysAdmin; 
+    }
 
 
     public void Update(int id,SysAdminUpdateRequest request)
