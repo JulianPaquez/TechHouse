@@ -41,11 +41,18 @@ public class SysAdminController : ControllerBase
         return Ok(_sysAdminService.Create(request));
     }
 
-    [HttpPut]
+    [HttpPut("{id}")]
     public IActionResult Update(int id, SysAdminUpdateRequest request ) 
     {
-        _sysAdminService.Update(id,request);
-        return Ok();
+         try
+        {
+            _sysAdminService.Update(id,request);
+            return Ok();
+        }
+        catch (System.Exception)
+        {
+            return BadRequest();
+        }
     }
 
     [HttpDelete("{id}")]
