@@ -34,6 +34,7 @@ public class AdminService : IAdminService
         admin.Email = request.Email;
         admin.Password = request.Password;
         admin.Username = request.Username;
+
         _adminRepository.Update(admin);
 
     }
