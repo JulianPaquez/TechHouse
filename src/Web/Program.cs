@@ -35,12 +35,13 @@ builder.Services.AddSwaggerGen();
 
 #region Services
 builder.Services.AddScoped<ISysAdminService, SysAdminService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 #endregion
 
 #region Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISysAdminRepository, SysAdminRepository>();
-
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 
 #endregion
 
