@@ -1,3 +1,5 @@
+using Domain.Enums;
+
 namespace Domain.Entities;
 
 public class SysAdmin : User
@@ -5,7 +7,6 @@ public class SysAdmin : User
 {
     public SysAdmin()
     {
-         UserType = "SysAdmin";
     }
     public SysAdmin(string name,string lastName, string email,string password,string username) 
     {
@@ -14,6 +15,6 @@ public class SysAdmin : User
         Email = email;
         Password = password;
         Username = username;
-        UserType = "SysAdmin";
+        UserType = UserType.SysAdmin;
     }
 }
