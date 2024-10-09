@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20241009181549_AdminMigration")]
-    partial class AdminMigration
+    [Migration("20241009194452_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,9 +42,8 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("UserType")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -53,6 +52,45 @@ namespace Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Admins");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Adress")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("Domain.Entities.SysAdmin", b =>
@@ -78,9 +116,8 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("UserType")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Username")
                         .IsRequired()

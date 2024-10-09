@@ -7,20 +7,9 @@ using Domain.Entities;
 using Domain.Interfaces;
 
 using Infrastructure.Repositories;
-
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-
-using Microsoft.OpenApi.Models;
-using System.Reflection;
-using System.Text;
-using Infrastructure;
-using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
-using Infrastructure.Repositories;
 using Microsoft.Data.Sqlite;
+using Application.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,12 +24,15 @@ builder.Services.AddSwaggerGen();
 
 #region Services
 builder.Services.AddScoped<ISysAdminService, SysAdminService>();
+builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 #endregion
 
 #region Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISysAdminRepository, SysAdminRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 
 #endregion
