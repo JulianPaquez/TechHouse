@@ -15,7 +15,7 @@ public class AdminService : IAdminService
     }
     public Admin Create(AdminCreateRequest request)
     {
-        var newAdmin = new Admin(request.Name, request.Username, request.Password);
+        var newAdmin = new Admin(request.Name, request.Lastname, request.Username, request.Password, request.Email);
 
         _adminRepository.Create(newAdmin);
 
@@ -24,32 +24,35 @@ public class AdminService : IAdminService
 
     public void Update(int id, AdminUpdateRequest request)
     {
-        var Admin = _adminRepository.GetById(id);
-        if (Admin != null)
+        var admin = _adminRepository.GetById(id);
+        if (admin == null)
         {
-            Admin.Name = request.Name;
-            Admin.Username = request.Username;
-            Admin.Password = request.Password;
-
-            _adminRepository.Update(Admin);
+            throw new Exception("Admin no encontrado");
         }
+        admin.Name = request.Name;
+        admin.LastName = request.Lastname;
+        admin.Email = request.Email;
+
+        _adminRepository.Update(admin);
+
     }
     public AdminDto GetById(int id)
     {
 
 
         var Admin = _adminRepository.GetById(id);
-        if (Admin != null)
+        if (Admin == null)
         {
-            return new AdminDto
-            {
-                Id = Admin.Id,
-                Name = Admin.Name,
-                Username = Admin.Username,
-                Password = Admin.Password,
-            };
+            throw new Exception("Admin no encontrado");
         }
-        return null;
+        return new AdminDto
+        {
+            Id = Admin.Id,
+            Name = Admin.Name,
+            Username = Admin.Username,
+            Password = Admin.Password,
+        };
+
 
     }
 
@@ -62,9 +65,13 @@ public class AdminService : IAdminService
     public void Delete(int id)
     {
         var admin = _adminRepository.GetById(id);
-        if (admin != null)
+        if (admin == null)
         {
-            _adminRepository.Delete(admin);
+
+            throw new Exception("Admin no encontrado");
         }
+        _adminRepository.Delete(admin);
+
+
     }
 }

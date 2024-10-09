@@ -10,8 +10,9 @@ namespace Infrastructure.Repositories
         {
         }
 
-       
+
         public DbSet<SysAdmin> SysAdmins { get; set; }
-       
+        public DbSet<Admin> Admins { get; set; }
+
     }
 }

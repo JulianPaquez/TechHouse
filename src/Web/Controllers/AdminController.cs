@@ -32,7 +32,16 @@ public class AdminController : ControllerBase
 
     public ActionResult<AdminDto> GetByid(int id)
     {
-        return _adminService.GetById(id);
+        try
+        {
+            return _adminService.GetById(id);
+        }
+        catch (System.Exception)
+        {
+
+            return BadRequest();
+        }
+
     }
     [HttpPost]
 
@@ -53,10 +62,21 @@ public class AdminController : ControllerBase
             return BadRequest();
         }
     }
+
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        _adminService.Delete(id);
-        return Ok();
+        try
+        {
+            _adminService.Delete(id);
+            return Ok();
+        }
+        catch (System.Exception)
+        {
+
+            return NotFound();
+        }
+
+
     }
 }
