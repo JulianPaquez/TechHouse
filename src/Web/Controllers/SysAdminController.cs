@@ -31,7 +31,15 @@ public class SysAdminController : ControllerBase
 
     public ActionResult<SysAdminDto> GetByid(int id) 
     {
-        return _sysAdminService.GetById(id);
+        try
+        {
+            return _sysAdminService.GetById(id);
+        }
+        catch (System.Exception)
+        {
+
+            return BadRequest();
+        }
     }
 
     [HttpPost]
@@ -42,7 +50,7 @@ public class SysAdminController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, SysAdminUpdateRequest request ) 
+   public IActionResult Update(int id, SysAdminUpdateRequest request ) 
     {
          try
         {
@@ -58,7 +66,15 @@ public class SysAdminController : ControllerBase
     [HttpDelete("{id}")]
     public IActionResult Delete(int id) 
     {   
-        _sysAdminService.Delete(id);
-        return Ok();
+         try
+        {
+            _sysAdminService.Delete(id);
+            return Ok();
+        }
+        catch (System.Exception)
+        {
+
+            return NotFound();
+        }
     }
 }

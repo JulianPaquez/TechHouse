@@ -30,14 +30,15 @@ public class SysAdminService : ISysAdminService
     public void Update(int id,SysAdminUpdateRequest request)
     {
         var sysAdmin = _sysAdminRepository.GetById(id);
-        if(sysAdmin != null) 
+        if(sysAdmin == null) 
         {
-            sysAdmin.Name = request.Name;
-            sysAdmin.LastName = request.LastName;
-            sysAdmin.Email = request.Email;
-
-            _sysAdminRepository.Update(sysAdmin);
+            throw new Exception("SysAdmin no encontrado");
         }
+        sysAdmin.Name = request.Name;
+        sysAdmin.LastName = request.LastName;
+        sysAdmin.Email = request.Email;
+
+        _sysAdminRepository.Update(sysAdmin);
     }
 
     public SysAdminDto GetById(int id)
@@ -45,17 +46,17 @@ public class SysAdminService : ISysAdminService
         
         
          var sysAdmin = _sysAdminRepository.GetById(id);
-           if(sysAdmin != null)
+        if (sysAdmin == null)
         {
-            return new SysAdminDto
-                { 
-                    Id = sysAdmin.Id,
-                    Name = sysAdmin.Name,
-                    LastName = sysAdmin.LastName,
-                    Email = sysAdmin.Email,
-                };
+            throw new Exception("SysAdmin no encontrado");
         }
-        return null;
+        return new SysAdminDto
+        {
+            Id = sysAdmin.Id,
+            Name = sysAdmin.Name,
+            LastName = sysAdmin.LastName,
+            Email = sysAdmin.Email,
+        };
          
     }
 
@@ -67,10 +68,12 @@ public class SysAdminService : ISysAdminService
 
     public void Delete(int id)
     {
-        var sysAdmin = _sysAdminRepository.GetById(id );
-        if(sysAdmin != null)
+      var sysAdmin = _sysAdminRepository.GetById(id);
+        if (sysAdmin == null)
         {
-            _sysAdminRepository.Delete(sysAdmin);
+
+            throw new Exception("Admin no encontrado");
         }
+        _sysAdminRepository.Delete(sysAdmin);
     }
 }
