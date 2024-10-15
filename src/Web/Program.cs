@@ -5,11 +5,19 @@ using Application.Service;
 using Domain;
 using Domain.Entities;
 using Domain.Interfaces;
-
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Application.Services;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using static Infrastructure.Services.AuthService;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using Application.Interfaces;
+using Infrastructure.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,12 +34,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ISysAdminService, SysAdminService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.Configure<AuthenticationServiceOptions>(
+    builder.Configuration.GetSection(AuthenticationServiceOptions.AuthService)
+);
 #endregion
 
 #region Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISysAdminRepository, SysAdminRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IBaseRepository<User>, EfRepository<User>>();
 
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 
@@ -48,6 +61,22 @@ using (var command = connection.CreateCommand())
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseSqlite(connection, b => b.MigrationsAssembly("Infrastructure")));
+
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["AuthService:Issuer"], // Aquí está buscando en "AuthService"
+            ValidAudience = builder.Configuration["AuthService:Audience"], // Aquí está buscando en "AuthService"
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["AuthService:SecretForKey"])) // Aquí está buscando en "AuthService"
+        };
+    });
+
+
 
 var app = builder.Build();
 
