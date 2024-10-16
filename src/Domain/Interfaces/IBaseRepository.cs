@@ -7,5 +7,7 @@ namespace Domain.Interfaces
         void Delete(T entity);
         T Update(T entity);
         T Create(T entity);
+        
+        
     }
 }
