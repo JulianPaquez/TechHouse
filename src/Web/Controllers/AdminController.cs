@@ -4,6 +4,7 @@ using Domain.Entities;
 using Application;
 using Appication.Interfaces;
 using Application.Request;
+using Application.Models;
 
 
 namespace Web.Controllers;
@@ -42,6 +43,39 @@ public class AdminController : ControllerBase
             return BadRequest();
         }
 
+    }
+
+    [HttpGet("clients")]
+    public ActionResult<List<ClientDto>> GetAllClients()
+    {
+        try
+    {
+        var result = _adminService.GetAllClients();
+        return Ok(result);
+    }
+    catch (Exception ex)
+    {
+        // Log error details
+        Console.WriteLine("Error retrieving products: " + ex.Message);
+        return BadRequest(new { error = ex.Message, stackTrace = ex.StackTrace });
+    }
+    }
+
+    // Endpoint para obtener todos los productos
+    [HttpGet("products")]
+    public ActionResult<List<ProductDto>> GetAllProducts()
+    {
+         try
+    {
+        var result = _adminService.GetAllProducts();
+        return Ok(result);
+    }
+    catch (Exception ex)
+    {
+        // Log error details
+        Console.WriteLine("Error retrieving products: " + ex.Message);
+        return BadRequest(new { error = ex.Message, stackTrace = ex.StackTrace });
+    }
     }
     [HttpPost]
 
