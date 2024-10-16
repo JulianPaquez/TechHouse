@@ -49,9 +49,11 @@ namespace Application.Services
         public ClientDto GetById(int id)
         {
             var client = _clientRepository.GetById(id);
-            if (client != null)
+            if (client == null)
             {
-                return new ClientDto
+                throw new Exception("Client not found");
+            }
+            return new ClientDto
                 {
                     Id = client.Id,
                     Name = client.Name,
@@ -61,8 +63,6 @@ namespace Application.Services
                     Adress = client.Adress,
                     UserType = UserType.Client,
                 };
-            }
-            return null;
         }
 
         public List<ClientDto> GetAll()
