@@ -10,6 +10,7 @@ using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Application.Services;
+using Application.Interfaces;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,14 +27,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ISysAdminService, SysAdminService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 #endregion
 
 #region Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISysAdminRepository, SysAdminRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
-
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 #endregion
 

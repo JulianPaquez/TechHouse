@@ -1,4 +1,5 @@
 using Application;
+using Application.Models;
 using Application.Request;
 using Domain.Entities;
 
@@ -11,4 +12,6 @@ public interface IAdminService
     Admin Create(AdminCreateRequest request);
     void Update(int id, AdminUpdateRequest request);
     void Delete(int id);
+    object? GetAllClients();
+    object? GetAllProducts();
 }
