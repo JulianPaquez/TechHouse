@@ -2,6 +2,7 @@ using System;
 using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,13 +20,15 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Sysadmin")]
     public ActionResult<List<ProductDto>> GetAll()
     {
         return _productService.GetAll();
     }
 
     [HttpGet("{id}")]
-    
+    [Authorize(Roles = "Sysadmin")]
+
     public ActionResult<ProductDto> GetById(int id)
     {
         try
@@ -34,43 +37,45 @@ public class ProductController : ControllerBase
         }
         catch (System.Exception)
         {
-            
-             return StatusCode(500, "Product not founded");
+
+            return StatusCode(500, "Product not founded");
         }
     }
 
     [HttpPost]
+    [Authorize(Roles = "Sysadmin")]
     public IActionResult Create([FromBody] ProductCreateRequest request)
-    {
-       try
-       {
-            _productService.Create(request);
-            return Ok();
-       }
-       catch (System.Exception)
-       {
-        
-           return StatusCode(500, "Product not created");
-       }
-    }
-
-    [HttpPut("{id}")]
-
-    public IActionResult Update(int id, ProductUpdateRequest request)
     {
         try
         {
-            _productService.Update(id,request);
+            _productService.Create(request);
             return Ok();
         }
         catch (System.Exception)
         {
-            
+
+            return StatusCode(500, "Product not created");
+        }
+    }
+
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Sysadmin")]
+    public IActionResult Update(int id, ProductUpdateRequest request)
+    {
+        try
+        {
+            _productService.Update(id, request);
+            return Ok();
+        }
+        catch (System.Exception)
+        {
+
             return StatusCode(500, "Product not founded");
         }
     }
 
     [HttpDelete]
+    [Authorize(Roles = "Sysadmin")]
     public IActionResult Delete(int id)
     {
         try
@@ -80,7 +85,7 @@ public class ProductController : ControllerBase
         }
         catch (System.Exception)
         {
-            
+
             return StatusCode(500, "Product not founded");
         }
     }

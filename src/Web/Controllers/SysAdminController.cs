@@ -4,6 +4,7 @@ using Domain.Entities;
 using Application;
 using Appication.Interfaces;
 using Application.Request;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Web.Controllers;
@@ -21,15 +22,17 @@ public class SysAdminController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Sysadmin")]
 
     public ActionResult<List<SysAdminDto>> GetAll()
     {
-      return _sysAdminService.GetAll();
+        return _sysAdminService.GetAll();
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "Sysadmin")]
 
-    public ActionResult<SysAdminDto> GetByid(int id) 
+    public ActionResult<SysAdminDto> GetByid(int id)
     {
         try
         {
@@ -43,18 +46,20 @@ public class SysAdminController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Sysadmin")]
 
-    public IActionResult Create( SysAdminCreateRequest request )
+    public IActionResult Create(SysAdminCreateRequest request)
     {
         return Ok(_sysAdminService.Create(request));
     }
 
     [HttpPut("{id}")]
-   public IActionResult Update(int id, SysAdminUpdateRequest request ) 
+    [Authorize(Roles = "Sysadmin")]
+    public IActionResult Update(int id, SysAdminUpdateRequest request)
     {
-         try
+        try
         {
-            _sysAdminService.Update(id,request);
+            _sysAdminService.Update(id, request);
             return Ok();
         }
         catch (System.Exception)
@@ -64,9 +69,10 @@ public class SysAdminController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id) 
-    {   
-         try
+    [Authorize(Roles = "Sysadmin")]
+    public IActionResult Delete(int id)
+    {
+        try
         {
             _sysAdminService.Delete(id);
             return Ok();

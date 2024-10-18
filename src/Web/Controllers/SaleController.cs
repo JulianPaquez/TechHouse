@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -20,6 +21,7 @@ namespace Web.Controllers
             return _saleServices.GetAll();
         }
         [HttpGet("{id}")]
+        [Authorize(Roles = "Sysadmin")]
         public ActionResult<SaleDto> GetById(int id)
         {
             try
@@ -28,16 +30,18 @@ namespace Web.Controllers
             }
             catch (System.Exception)
             {
-                return StatusCode(500,"No se encontro una venta con ese ID");
+                return StatusCode(500, "No se encontro una venta con ese ID");
             }
         }
         [HttpPost]
+        [Authorize(Roles = "Sysadmin")]
         public IActionResult Create(SaleCreateRequest request)
         {
-            return Ok(_saleServices.Create(request));     
+            return Ok(_saleServices.Create(request));
         }
         [HttpPut("{id}")]
-        public IActionResult Update(int id,[FromBody]SaleUpdateRequest request)
+        [Authorize(Roles = "Sysadmin")]
+        public IActionResult Update(int id, [FromBody] SaleUpdateRequest request)
         {
             try
             {
@@ -50,7 +54,8 @@ namespace Web.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id) 
+        [Authorize(Roles = "Sysadmin")]
+        public IActionResult Delete(int id)
         {
             try
             {
