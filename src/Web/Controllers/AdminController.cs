@@ -6,8 +6,11 @@ using Application.Models.Request;
 using Application.Models;
 using System;
 using System.Collections.Generic;
-using Domain.Exceptions;
+
 using Microsoft.AspNetCore.Authorization;
+using Appication.Interfaces;
+using Application;
+using Application.Request;
 
 
 namespace Web.Controllers;
@@ -15,7 +18,7 @@ namespace Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "Sysadmin")]
+[Authorize]
 
 public class AdminController : ControllerBase
 {
@@ -27,7 +30,7 @@ public class AdminController : ControllerBase
 
 
     [HttpGet]
-
+    [Authorize(Roles = "Sysadmin")]
     public ActionResult<List<AdminDto>> GetAll()
     {
         return _adminService.GetAll();

@@ -32,13 +32,15 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(setupAction =>
-setupAction.AddSecurityDefinition("PIII-TPIBearerAuth", new OpenApiSecurityScheme() //Esto va a permitir usar swagger con el token.
 {
-    Type = SecuritySchemeType.Http,
-    Scheme = "Bearer",
-    Description = "Aca pegar el token generado al loguearse."
-}););
-setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
+    setupAction.AddSecurityDefinition("TechHouseBearerAuth", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        Description = "Aca pegar el token generado al loguearse."
+    });
+
+    setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
             new OpenApiSecurityScheme
@@ -46,12 +48,19 @@ setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "PIII-TPIBearerAuth" } //Tiene que coincidir con el id seteado arriba en la definici�n
-                }, new List<string>() }
+                    Id = "TechHouseBearerAuth" // Tiene que coincidir con el id de la definición arriba
+                }
+            },
+            new List<string>()
+        }
     });
+
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    //setupAction.IncludeXmlComments(xmlPath); no se pudo configurar el archivo xml
+
+    // Si puedes configurar el archivo XML correctamente, descomenta la siguiente línea
+    // setupAction.IncludeXmlComments(xmlPath);
+});
 
 #region Services
 builder.Services.AddScoped<ISysAdminService, SysAdminService>();

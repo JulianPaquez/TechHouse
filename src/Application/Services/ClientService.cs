@@ -51,7 +51,7 @@ namespace Application.Services
             var client = _clientRepository.GetById(id);
             if (client == null)
             {
-                throw new Exception("Client not found");
+                return null;
             }
             return new ClientDto
                 {
