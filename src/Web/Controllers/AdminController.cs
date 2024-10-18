@@ -1,10 +1,13 @@
+using Application.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using Domain.Entities;
-using Application;
-using Appication.Interfaces;
-using Application.Request;
+using Application.Interfaces;
+using Application.Models.Request;
 using Application.Models;
+using System;
+using System.Collections.Generic;
+using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Web.Controllers;
@@ -12,6 +15,7 @@ namespace Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "Sysadmin")]
 
 public class AdminController : ControllerBase
 {
@@ -31,7 +35,7 @@ public class AdminController : ControllerBase
 
     [HttpGet("{id}")]
 
-    public ActionResult<AdminDto> GetByid(int id)
+    public ActionResult<AdminDto> GetByid([FromRoute]int id)
     {
         try
         {
@@ -79,12 +83,12 @@ public class AdminController : ControllerBase
     }
     [HttpPost]
 
-    public IActionResult Create(AdminCreateRequest request)
+    public IActionResult Create([FromBody] AdminCreateRequest request)
     {
         return Ok(_adminService.Create(request));
     }
     [HttpPut("{id}")]
-    public IActionResult Update(int id, AdminUpdateRequest request)
+    public IActionResult Update([FromRoute]int id,[FromBody] AdminUpdateRequest request)
     {
         try
         {
@@ -98,7 +102,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public IActionResult Delete([FromRoute] int id)
     {
         try
         {
