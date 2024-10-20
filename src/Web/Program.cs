@@ -11,7 +11,9 @@ using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Application.Services;
+
 using Application.Interfaces;
+
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using static Infrastructure.Services.AuthService;
@@ -19,6 +21,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Application.Interfaces;
 using Infrastructure.Services;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,21 +38,27 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ISysAdminService, SysAdminService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddScoped<ISaleServices, SaleServices>();
+
+builder.Services.AddScoped<IProductService, ProductService>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.Configure<AuthenticationServiceOptions>(
     builder.Configuration.GetSection(AuthenticationServiceOptions.AuthService)
 );
+
 #endregion
 
 #region Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISysAdminRepository, SysAdminRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+
+
 builder.Services.AddScoped<IBaseRepository<User>, EfRepository<User>>();
 
+
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
-builder.Services.AddScoped<ISaleRepository, SaleRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 #endregion
 
