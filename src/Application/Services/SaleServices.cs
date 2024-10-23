@@ -5,30 +5,32 @@ using Domain.Entities;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
     public class SaleServices : ISaleServices
     {
         private readonly ISaleRepository _saleRepository;
-        public SaleServices(ISaleRepository saleRepository)
+        private readonly ISaleDetailsRepository _saleDetailsRepository;
+
+        public SaleServices(ISaleRepository saleRepository, ISaleDetailsRepository saleDetailsRepository)
         {
             _saleRepository = saleRepository;
+            _saleDetailsRepository = saleDetailsRepository;
         }
-        public List<SaleDto> GetAll() 
+
+        public List<SaleDto> GetAll()
         {
             var list = _saleRepository.GetAll();
             return SaleDto.CreateList(list);
         }
-        public SaleDto GetById(int id) 
+
+        public SaleDto GetById(int id)
         {
             var sale = _saleRepository.GetById(id);
-            if(sale == null) 
+            if (sale == null)
             {
-                throw new Exception("Venta no encontrado");
+                throw new Exception("Venta no encontrada");
             }
             return new SaleDto
             {
@@ -39,18 +41,36 @@ namespace Application.Services
                 Amount = sale.Amount,
             };
         }
-        public Sale Create(SaleCreateRequest request)
+
+        public void Create(SaleCreateRequest request)
         {
-            var newSale = new Sale(request.DateTime, request.TotalSaleAmount, request.ProductSale, request.Amount);
-            _saleRepository.Create(newSale);
-            return newSale;
+            
+
+            var sale = new Sale(request.DateTime, request.TotalSaleAmount, request.ProductSale, request.Amount,request.SaleDetails);
+            
+            var saleDetails = new List<SaleDetails>();
+            foreach (var saleDetailId in request.SaleDetails)
+            {
+                var saleDetail = _saleDetailsRepository.GetById(saleDetailId);
+                if (saleDetail != null)
+                {
+                    saleDetails.Add(saleDetail);
+                }
+            }
+
+            
+            sale.AddSaleDetails(saleDetails);
+
+           
+            _saleRepository.Create(sale);
         }
-        public void Update(int id,SaleUpdateRequest request)
+
+        public void Update(int id, SaleUpdateRequest request)
         {
             var sale = _saleRepository.GetById(id);
             if (sale == null)
             {
-                throw new Exception("Venta no encontrado");
+                throw new Exception("Venta no encontrada");
             }
             sale.DateTime = request.DateTime;
             sale.TotalSaleAmount = request.TotalSaleAmount;
@@ -59,12 +79,13 @@ namespace Application.Services
 
             _saleRepository.Update(sale);
         }
+
         public void Delete(int id)
         {
             var sale = _saleRepository.GetById(id);
             if (sale == null)
             {
-                throw new Exception("Venta no encontrado");
+                throw new Exception("Venta no encontrada");
             }
             _saleRepository.Delete(sale);
         }

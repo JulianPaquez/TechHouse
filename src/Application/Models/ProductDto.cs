@@ -25,7 +25,8 @@ public class ProductDto
     {
          if (products == null || !products.Any())
         {
-            throw new Exception("No products available to map.");
+            return null;
+            //corregir
         }
 
         return products.Select(p => new ProductDto

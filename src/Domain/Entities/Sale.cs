@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
@@ -14,19 +11,28 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public DateTime DateTime { get; set; }
-        public int TotalSaleAmount { get; set; }
+        public decimal TotalSaleAmount { get; set; }
         public string ProductSale { get; set; }
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
 
-        public Sale() { }
+        [Required]
+        public ICollection<SaleDetails>? SaleDetails { get; set; }
 
-        public Sale(DateTime  dateTime, int totalSaleAmount, string productSale, int amount) 
+        public Sale() { }  
+        
+        public Sale(DateTime dateTime, decimal totalSaleAmount, string productSale, decimal amount, ICollection<SaleDetails> saleDetails)
         {
             DateTime = dateTime;
             TotalSaleAmount = totalSaleAmount;
             ProductSale = productSale;
             Amount = amount;
+            SaleDetails = saleDetails; 
         }
-    }
 
+        public void AddSaleDetails(ICollection<SaleDetails> saleDetails)
+        {
+            SaleDetails = saleDetails;
+        }
+
+    }
 }

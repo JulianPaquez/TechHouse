@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface ISaleServices
+    public interface ISaleDetailsService
     {
-        List<SaleDto> GetAll();
-        SaleDto GetById(int id);
-        void Create(SaleCreateRequest request);
-        void Update(int id,SaleUpdateRequest request);
+        List<SaleDetailsDto> GetAll();
+        SaleDetailsDto GetById(int id);
+        void Create(SaleDetailsCreateRequest request);
+        void Update(int id,SaleDetailsUpdateRequest request);
         void Delete(int id);
-
+        
     }
 }

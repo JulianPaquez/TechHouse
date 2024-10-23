@@ -7,11 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface ISaleRepository : IBaseRepository<Sale>
+    public interface ISaleDetailsRepository : IBaseRepository<SaleDetails>
     {
-        List<Sale> GetAll();
-        Sale? GetById<TId>(TId id);
-
     }
-
 }
