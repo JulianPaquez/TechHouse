@@ -21,6 +21,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Application.Interfaces;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 
 
@@ -114,6 +115,8 @@ builder.Services.AddAuthentication("Bearer")
             ValidAudience = builder.Configuration["AuthService:Audience"], // Aquí está buscando en "AuthService"
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["AuthService:SecretForKey"])) // Aquí está buscando en "AuthService"
         };
+
+        
     });
 
 
@@ -129,6 +132,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

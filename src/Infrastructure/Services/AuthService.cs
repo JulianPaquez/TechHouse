@@ -55,11 +55,12 @@ namespace Infrastructure.Services
             var data = new SigningCredentials(securityPassword, SecurityAlgorithms.HmacSha256);
 
             var claimsForToken = new List<Claim>
-    {
-        new Claim("sub", user.Id.ToString()),
-        new Claim("given_name", user.Name),
-        new Claim("family_name", user.LastName)
-    };
+            {
+                new Claim("sub", user.Id.ToString()),
+                new Claim("given_name", user.Name),
+                new Claim("family_name", user.LastName),
+                new Claim("role", user.UserType.ToString())
+            };
 
             var jwtSecurityToken = new JwtSecurityToken(
                 _options.Issuer,
