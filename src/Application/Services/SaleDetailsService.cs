@@ -16,12 +16,23 @@ namespace Application.Services
         private readonly ISaleRepository _saleRepository;
         private readonly IProductRepository _productRepository;
 
-
+        public SaleDetailsService(ISaleDetailsRepository saleDetailsRepository, ISaleRepository saleRepository, IProductRepository productRepository)
+        {
+            _saleDetailsRepository = saleDetailsRepository;
+            _saleRepository = saleRepository;
+            _productRepository = productRepository;
+        }
 
         public List<SaleDetailsDto> GetAll()
         {
-            var list = _saleDetailsRepository.GetAll();
-            return SaleDetailsDto.CreateList(list);
+            var saleDetailsList = _saleDetailsRepository.GetAll();
+
+            if (saleDetailsList == null || !saleDetailsList.Any())
+            {
+                throw new Exception("No se encontraron detalles de ventas.");
+            }
+
+            return SaleDetailsDto.CreateList(saleDetailsList);
         }
 
         public SaleDetailsDto GetById(int id)
@@ -32,13 +43,7 @@ namespace Application.Services
                 throw new Exception("Detalle de la venta no encontrado");
             }
 
-            // Solo devuelve el ID del SaleDetails
-            return new SaleDetailsDto
-            {
-                Id = details.Id,
-                SaleId = details.SaleId,
-                ProductId = details.ProductId,
-            };
+            return SaleDetailsDto.Create(details);
         }
 
         public void Create(SaleDetailsCreateRequest request)
@@ -51,16 +56,20 @@ namespace Application.Services
                 throw new Exception("Producto o venta no encontrado");
             }
 
-            // Crear una nueva instancia de SaleDetails sin asignar manualmente el Id
             var saleDetails = new SaleDetails
             {
-                Sale= saleFound,
+                Sale = saleFound,
                 Product = productFound,
+                ProductId = productFound.Id,
+                SaleId = saleFound.Id,
+                ProductName = productFound.Name,
+                ProductPrice = productFound.Price,
+                Stock = request.Stock,
+                TotalAmount = productFound.Price * request.Stock
             };
 
             _saleDetailsRepository.Create(saleDetails);
         }
-
 
         public void Update(int id, SaleDetailsUpdateRequest request)
         {
@@ -80,6 +89,10 @@ namespace Application.Services
 
             saleDetails.ProductId = request.ProductId;
             saleDetails.SaleId = request.SaleId;
+            saleDetails.ProductName = productFound.Name;
+            saleDetails.ProductPrice = productFound.Price;
+            saleDetails.Stock = request.Stock;
+            saleDetails.TotalAmount = productFound.Price * request.Stock;
 
             _saleDetailsRepository.Update(saleDetails);
         }

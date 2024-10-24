@@ -1,10 +1,17 @@
-﻿using Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Application.Models.Request
 {
     public class SaleDetailsUpdateRequest
     {
-        public int SaleId { get; set; } // Mantenido
-        public int ProductId { get; set; } // Agregado ProductId
+        [Required]
+        public int ProductId { get; set; }
+
+        [Required]
+        public int SaleId { get; set; }
+
+        // Agregada la propiedad Stock
+        [Required]
+        public int Stock { get; set; } // Cantidad vendida del producto
     }
 }

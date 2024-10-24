@@ -6,5 +6,6 @@ namespace Application.Models.Request
     {
         public int ProductId { get; set; } 
         public int SaleId { get; set; } 
+        public int Stock {get; set;}
     }
 }

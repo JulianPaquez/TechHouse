@@ -40,8 +40,6 @@ namespace Application.Services
         public void Create(SaleCreateRequest request)
         {
             var saleDetailsList = new List<SaleDetails>();
-
-            // Crear una lista de nombres de productos vendidos
             var productNames = new List<string>();
 
             foreach (var productSaleRequest in request.ProductSales)
@@ -67,12 +65,13 @@ namespace Application.Services
                 var saleDetail = new SaleDetails
                 {
                     ProductId = product.Id,
-                    Stock = productSaleRequest.Stock
+                    Stock = productSaleRequest.Stock,
+                    ProductName = product.Name,
+                    ProductPrice = product.Price,
+                    TotalAmount = product.Price * productSaleRequest.Stock // Calcular el monto total para este detalle
                 };
 
                 saleDetailsList.Add(saleDetail);
-
-                // Agregar el nombre del producto a la lista de nombres
                 productNames.Add(product.Name);
             }
 
@@ -84,8 +83,65 @@ namespace Application.Services
 
             // Crear la venta incluyendo los nombres de los productos
             var sale = new Sale(request.DateTime, totalAmount, productNamesString);
+
+            // Agregar los detalles de venta a la venta
+            foreach (var detail in saleDetailsList)
+            {
+                sale.SaleDetails.Add(detail);
+            }
+
             _saleRepository.Create(sale);
         }
+
+        // public void Create(SaleCreateRequest request)
+        // {
+        //     var saleDetailsList = new List<SaleDetails>();
+
+        //     // Crear una lista de nombres de productos vendidos
+        //     var productNames = new List<string>();
+
+        //     foreach (var productSaleRequest in request.ProductSales)
+        //     {
+        //         // Buscar el producto por nombre
+        //         var product = _productService.GetByName(productSaleRequest.Name);
+
+        //         if (product == null)
+        //         {
+        //             throw new Exception($"Producto '{productSaleRequest.Name}' no encontrado.");
+        //         }
+
+        //         // Validar si el producto tiene suficiente stock
+        //         if (product.QuantityStock < productSaleRequest.Stock)
+        //         {
+        //             throw new Exception($"Stock insuficiente para el producto '{product.Name}'. Stock disponible: {product.QuantityStock}");
+        //         }
+
+        //         // Restar stock del producto
+        //         _productService.ReduceStock(product.Id, productSaleRequest.Stock);
+
+        //         // Crear los detalles de la venta
+        //         var saleDetail = new SaleDetails
+        //         {
+        //             ProductId = product.Id,
+        //             Stock = productSaleRequest.Stock
+        //         };
+
+        //         saleDetailsList.Add(saleDetail);
+
+        //         // Agregar el nombre del producto a la lista de nombres
+        //         productNames.Add(product.Name);
+        //     }
+
+        //     // Calcular el total de la venta
+        //     var totalAmount = CalculateTotalSaleAmount(saleDetailsList);
+
+        //     // Concatenar los nombres de los productos en una cadena separada por comas
+        //     var productNamesString = string.Join(", ", productNames);
+
+        //     // Crear la venta incluyendo los nombres de los productos
+        //     var sale = new Sale(request.DateTime, totalAmount, productNamesString);
+        //     _saleRepository.Create(sale);
+        // }
 
         public void Update(int id, SaleUpdateRequest request)
         {

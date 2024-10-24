@@ -9,10 +9,14 @@ namespace Application.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public int SaleId { get; set; } // Agregado SaleId
-        public int ProductId { get; set; } // Agregado ProductId 
-        public Sale Sale {get; set;}
-         public Product Product { get; set; } 
+        public int SaleId { get; set; }
+        public int ProductId { get; set; }
+
+        // Información básica del producto y venta
+        public string ProductName { get; set; }
+        public decimal ProductPrice { get; set; }
+        public int Stock { get; set; }
+        public decimal TotalAmount { get; set; }
 
         public static SaleDetailsDto Create(SaleDetails saleDetails)
         {
@@ -21,8 +25,10 @@ namespace Application.Models
                 Id = saleDetails.Id,
                 SaleId = saleDetails.SaleId,
                 ProductId = saleDetails.ProductId,
-                 Sale = saleDetails.Sale,
-                Product = saleDetails.Product
+                ProductName = saleDetails.ProductName,
+                ProductPrice = saleDetails.ProductPrice,
+                Stock = saleDetails.Stock,
+                TotalAmount = saleDetails.TotalAmount
             };
         }
 
