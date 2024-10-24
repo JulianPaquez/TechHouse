@@ -41,6 +41,9 @@ namespace Application.Services
         {
             var saleDetailsList = new List<SaleDetails>();
 
+            // Crear una lista de nombres de productos vendidos
+            var productNames = new List<string>();
+
             foreach (var productSaleRequest in request.ProductSales)
             {
                 // Buscar el producto por nombre
@@ -68,13 +71,19 @@ namespace Application.Services
                 };
 
                 saleDetailsList.Add(saleDetail);
+
+                // Agregar el nombre del producto a la lista de nombres
+                productNames.Add(product.Name);
             }
 
             // Calcular el total de la venta
             var totalAmount = CalculateTotalSaleAmount(saleDetailsList);
 
-            // Crear la venta
-            var sale = new Sale(request.DateTime, totalAmount);
+            // Concatenar los nombres de los productos en una cadena separada por comas
+            var productNamesString = string.Join(", ", productNames);
+
+            // Crear la venta incluyendo los nombres de los productos
+            var sale = new Sale(request.DateTime, totalAmount, productNamesString);
             _saleRepository.Create(sale);
         }
 
