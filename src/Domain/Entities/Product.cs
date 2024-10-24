@@ -10,15 +10,16 @@ public class Product
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id {get;set;}
     public string Name {get;set;}
-    public int QuantityStock {get;set;}
-    public float Price {get;set;}
+    public int Stock {get;set;} = 0;
+    public decimal Price {get;set;}
+    public ICollection<SaleDetails>? SaleDetails {get; set;} = new List<SaleDetails>();
 
     public Product(){}
 
-    public Product(string name, int quantity, float price)
+    public Product(string name, int stock,decimal price)
     {
         Name = name;
-        QuantityStock = quantity;
+        Stock = stock;
         Price = price;
     }
 }

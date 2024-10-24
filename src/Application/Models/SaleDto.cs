@@ -11,10 +11,11 @@ namespace Application.Models
     {
         public int Id { get; set; }
         public DateTime DateTime { get; set; }
-        public decimal TotalSaleAmount { get; set; }
-        public string ProductSale { get; set; }
-        public decimal Amount { get; set; }
-        public ICollection<SaleDetails> SaleDetails { get; set; }
+        public decimal TotalSaleAmount { get; set; } = 0;
+        // public string ProductSale { get; set; }
+
+        // public ICollection<SaleDetails> ? SaleDetails { get; set; } 
+        
 
         public static SaleDto Create(Sale sale) 
         {
@@ -23,9 +24,8 @@ namespace Application.Models
                 Id = sale.Id,
                 DateTime = sale.DateTime,
                 TotalSaleAmount = sale.TotalSaleAmount,
-                ProductSale = sale.ProductSale,
-                Amount = sale.Amount,
-                SaleDetails = sale.SaleDetails != null ? SaleDetailsDto.CreateList(sale.SaleDetails) : null
+                // ProductSale = sale.ProductSale,
+                // SaleDetails = sale.SaleDetails,
             };
 
         }

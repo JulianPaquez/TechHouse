@@ -3,8 +3,8 @@ using Domain.Entities;
 
 namespace Infrastructure.Repositories
 {
-public class ApplicationContext : DbContext
-{
+    public class ApplicationContext : DbContext
+    {
         public DbSet<SysAdmin> SysAdmins { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<User> Users { get; set; }
@@ -18,15 +18,11 @@ public class ApplicationContext : DbContext
         {
         }
 
-
-
-        
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configuración de las relaciones entre entidades
+            // ConfiguraciÃ³n de la entidad SaleDetails
             modelBuilder.Entity<SaleDetails>()
-                 .HasKey(sd => new { sd.SaleId, sd.ProductId });
+                .HasKey(sd => sd.Id); // Usamos solo Id como clave primaria
 
             modelBuilder.Entity<SaleDetails>()
                 .HasOne(sd => sd.Sale)
@@ -35,13 +31,11 @@ public class ApplicationContext : DbContext
 
             modelBuilder.Entity<SaleDetails>()
                 .HasOne(sd => sd.Product)
-                .WithMany()
+                .WithMany(p => p.SaleDetails)
                 .HasForeignKey(sd => sd.ProductId);
-
-            // Configuración adicional de entidades si es necesario
-            modelBuilder.Entity<User>().HasDiscriminator(u => u.UserType);
 
             base.OnModelCreating(modelBuilder);
         }
+
     }
 }

@@ -11,28 +11,18 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public DateTime DateTime { get; set; }
-        public decimal TotalSaleAmount { get; set; }
-        public string ProductSale { get; set; }
-        public decimal Amount { get; set; }
+        public decimal TotalSaleAmount { get; set; } = 0;
 
         [Required]
-        public ICollection<SaleDetails>? SaleDetails { get; set; }
+        public ICollection<SaleDetails>? SaleDetails { get; set; } = new List<SaleDetails>();
 
         public Sale() { }  
         
-        public Sale(DateTime dateTime, decimal totalSaleAmount, string productSale, decimal amount, ICollection<SaleDetails> saleDetails)
+        public Sale(DateTime dateTime, decimal totalSaleAmount) //ICollection<SaleDetails> saleDetails)
         {
             DateTime = dateTime;
             TotalSaleAmount = totalSaleAmount;
-            ProductSale = productSale;
-            Amount = amount;
-            SaleDetails = saleDetails; 
+            // SaleDetails = saleDetails;
         }
-
-        public void AddSaleDetails(ICollection<SaleDetails> saleDetails)
-        {
-            SaleDetails = saleDetails;
-        }
-
     }
 }

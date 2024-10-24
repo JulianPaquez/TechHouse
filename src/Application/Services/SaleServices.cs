@@ -12,11 +12,13 @@ namespace Application.Services
     {
         private readonly ISaleRepository _saleRepository;
         private readonly ISaleDetailsRepository _saleDetailsRepository;
+        private readonly IProductService _productService;
 
-        public SaleServices(ISaleRepository saleRepository, ISaleDetailsRepository saleDetailsRepository)
+        public SaleServices(ISaleRepository saleRepository, ISaleDetailsRepository saleDetailsRepository, IProductService productService)
         {
             _saleRepository = saleRepository;
             _saleDetailsRepository = saleDetailsRepository;
+            _productService = productService;
         }
 
         public List<SaleDto> GetAll()
@@ -32,36 +34,47 @@ namespace Application.Services
             {
                 throw new Exception("Venta no encontrada");
             }
-            return new SaleDto
-            {
-                Id = sale.Id,
-                DateTime = sale.DateTime,
-                TotalSaleAmount = sale.TotalSaleAmount,
-                ProductSale = sale.ProductSale,
-                Amount = sale.Amount,
-            };
+            return SaleDto.Create(sale);
         }
 
         public void Create(SaleCreateRequest request)
         {
-            
+            var saleDetailsList = new List<SaleDetails>();
 
-            var sale = new Sale(request.DateTime, request.TotalSaleAmount, request.ProductSale, request.Amount,request.SaleDetails);
-            
-            var saleDetails = new List<SaleDetails>();
-            foreach (var saleDetailId in request.SaleDetails)
+            foreach (var productSaleRequest in request.ProductSales)
             {
-                var saleDetail = _saleDetailsRepository.GetById(saleDetailId);
-                if (saleDetail != null)
+                // Buscar el producto por nombre
+                var product = _productService.GetByName(productSaleRequest.Name);
+
+                if (product == null)
                 {
-                    saleDetails.Add(saleDetail);
+                    throw new Exception($"Producto '{productSaleRequest.Name}' no encontrado.");
                 }
+
+                // Validar si el producto tiene suficiente stock
+                if (product.QuantityStock < productSaleRequest.Stock)
+                {
+                    throw new Exception($"Stock insuficiente para el producto '{product.Name}'. Stock disponible: {product.QuantityStock}");
+                }
+
+                // Restar stock del producto
+                _productService.ReduceStock(product.Id, productSaleRequest.Stock);
+
+                // Crear los detalles de la venta
+                var saleDetail = new SaleDetails
+                {
+                    ProductId = product.Id,
+                    Stock = productSaleRequest.Stock
+                };
+
+                saleDetailsList.Add(saleDetail);
             }
 
-            
-            sale.AddSaleDetails(saleDetails);
+            // Calcular el total de la venta
+            var totalAmount = CalculateTotalSaleAmount(saleDetailsList);
 
-           
+            // Crear la venta
+            var sale = new Sale(request.DateTime, totalAmount);
             _saleRepository.Create(sale);
         }
 
@@ -72,10 +85,9 @@ namespace Application.Services
             {
                 throw new Exception("Venta no encontrada");
             }
+
             sale.DateTime = request.DateTime;
             sale.TotalSaleAmount = request.TotalSaleAmount;
-            sale.ProductSale = request.ProductSale;
-            sale.Amount = request.Amount;
 
             _saleRepository.Update(sale);
         }
@@ -88,6 +100,17 @@ namespace Application.Services
                 throw new Exception("Venta no encontrada");
             }
             _saleRepository.Delete(sale);
+        }
+
+        private decimal CalculateTotalSaleAmount(List<SaleDetails> saleDetailsList)
+        {
+            decimal total = 0;
+            foreach (var detail in saleDetailsList)
+            {
+                var product = _productService.GetById(detail.ProductId);
+                total += product.Price * detail.Stock;
+            }
+            return total;
         }
     }
 }

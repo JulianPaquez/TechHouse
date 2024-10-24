@@ -5,68 +5,90 @@ using Application.Models.Request;
 using Domain.Entities;
 using Domain.Interfaces;
 
-namespace Application.Services;
-
-public class ProductService : IProductService
+namespace Application.Services
 {
-    private readonly IProductRepository _productRepository;
-    public ProductService(IProductRepository productRepository)
+    public class ProductService : IProductService
     {
-        _productRepository = productRepository;
-    }
+        private readonly IProductRepository _productRepository;
 
-    public List<ProductDto> GetAll()
-    {
-        var list = _productRepository.GetAll();
-        return ProductDto.CreateList(list);
-    }
-
-    public ProductDto GetById(int id)
-    {
-        var product = _productRepository.GetById(id);
-
-        if(product == null)
+        public ProductService(IProductRepository productRepository)
         {
-            throw new Exception("Producto no encontrado");
+            _productRepository = productRepository;
         }
-        return new ProductDto
-        {
-            Id = product.Id,
-            Name = product.Name,
-            QuantityStock = product.QuantityStock,
-            Price = product.Price,
-        };
-    }
 
-    public void Create(ProductCreateRequest request)
-    {
-        var newProduct = new Product(request.Name, request.QuantityStock, request.Price);
-        _productRepository.Create(newProduct);
-        
-    }
-
-    public void Update(int id, ProductUpdateRequest request)
-    {
-        var product = _productRepository.GetById(id);
-        if(product == null)
+        public List<ProductDto> GetAll()
         {
-            throw new Exception("Producto no encontrado");
+            var list = _productRepository.GetAll();
+            return ProductDto.CreateList(list);
         }
-        product.Name = request.Name;
-        product.QuantityStock = request.QuantityStock;
-        product.Price = request.Price;
 
-        _productRepository.Update(product);
-    }
-
-    public void Delete(int id)
-    {
-        var product = _productRepository.GetById(id);
-        if(product == null)
+        public ProductDto GetById(int id)
         {
-            throw new Exception("Producto no encontrado");
+            var product = _productRepository.GetById(id);
+
+            if (product == null)
+            {
+                throw new Exception("Producto no encontrado");
+            }
+            return ProductDto.Create(product);
         }
-        _productRepository.Delete(product);
-        
+
+        public ProductDto GetByName(string name)
+        {
+            var product = _productRepository.GetByName(name);
+
+            if (product == null)
+            {
+                throw new Exception($"Producto '{name}' no encontrado.");
+            }
+            return ProductDto.Create(product);
+        }
+
+        public void Create(ProductCreateRequest request)
+        {
+            var newProduct = new Product(request.Name, request.Stock, request.Price);
+            _productRepository.Create(newProduct);
+        }
+
+        public void Update(int id, ProductUpdateRequest request)
+        {
+            var product = _productRepository.GetById(id);
+            if (product == null)
+            {
+                throw new Exception("Producto no encontrado");
+            }
+            product.Name = request.Name;
+            product.Stock = request.Stock;
+            product.Price = request.Price;
+
+            _productRepository.Update(product);
+        }
+
+        public void Delete(int id)
+        {
+            var product = _productRepository.GetById(id);
+            if (product == null)
+            {
+                throw new Exception("Producto no encontrado");
+            }
+            _productRepository.Delete(product);
+        }
+
+        public void ReduceStock(int productId, int quantity)
+        {
+            var product = _productRepository.GetById(productId);
+            if (product == null)
+            {
+                throw new Exception("Producto no encontrado");
+            }
+
+            if (product.Stock < quantity)
+            {
+                throw new Exception("Stock insuficiente.");
+            }
+
+            product.Stock -= quantity;
+            _productRepository.Update(product);
+        }
     }
 }

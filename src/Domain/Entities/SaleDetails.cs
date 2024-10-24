@@ -10,14 +10,20 @@ namespace Domain.Entities
         public int Id { get; set; }
 
         [Required]
-        public int SaleId { get; set; } // Agregado SaleId
+        public int SaleId { get; set; }
         [ForeignKey("SaleId")]
         public Sale Sale { get; set; }
 
         [Required]
-        public int ProductId { get; set; } // Agregado ProductId
+        public int ProductId { get; set; }
         [ForeignKey("ProductId")]
         public Product Product { get; set; }
+
+        [Required]
+        public int Stock { get; set; } // Cantidad vendida de este producto
+
+        // Opcional: puedes incluir el stock si es necesario
+        // public int StockAtSaleTime { get; set; } // Stock en el momento de la venta
 
         public SaleDetails() { }
 

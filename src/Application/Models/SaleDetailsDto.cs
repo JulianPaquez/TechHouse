@@ -10,7 +10,9 @@ namespace Application.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int SaleId { get; set; } // Agregado SaleId
-        public int ProductId { get; set; } // Agregado ProductId
+        public int ProductId { get; set; } // Agregado ProductId 
+        public Sale Sale {get; set;}
+         public Product Product { get; set; } 
 
         public static SaleDetailsDto Create(SaleDetails saleDetails)
         {
@@ -19,6 +21,8 @@ namespace Application.Models
                 Id = saleDetails.Id,
                 SaleId = saleDetails.SaleId,
                 ProductId = saleDetails.ProductId,
+                 Sale = saleDetails.Sale,
+                Product = saleDetails.Product
             };
         }
 
