@@ -12,6 +12,8 @@ namespace Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "SysAdmin")]
+
 
 public class SysAdminController : ControllerBase
 {

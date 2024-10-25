@@ -18,7 +18,7 @@ namespace Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "SysAdmin")]
+
 
 public class AdminController : ControllerBase
 {
@@ -30,12 +30,14 @@ public class AdminController : ControllerBase
 
 
     [HttpGet]
+    [Authorize(Roles = "SysAdmin, Admin")]
     public ActionResult<List<AdminDto>> GetAll()
     {
         return _adminService.GetAll();
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "SysAdmin,Admin")]
     public ActionResult<AdminDto> GetByid([FromRoute] int id)
     {
         try
@@ -50,46 +52,18 @@ public class AdminController : ControllerBase
 
     }
 
-    [HttpGet("clients")]
-    public ActionResult<List<ClientDto>> GetAllClients()
-    {
-        try
-        {
-            var result = _adminService.GetAllClients();
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            // Log error details
-            Console.WriteLine("Error retrieving products: " + ex.Message);
-            return BadRequest(new { error = ex.Message, stackTrace = ex.StackTrace });
-        }
-    }
 
-    // Endpoint para obtener todos los productos
-    [HttpGet("products")]
-
-    public ActionResult<List<ProductDto>> GetAllProducts()
-    {
-        try
-        {
-            var result = _adminService.GetAllProducts();
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            // Log error details
-            Console.WriteLine("Error retrieving products: " + ex.Message);
-            return BadRequest(new { error = ex.Message, stackTrace = ex.StackTrace });
-        }
-    }
     [HttpPost]
+    [Authorize(Roles = "SysAdmin")]
 
     public IActionResult Create([FromBody] AdminCreateRequest request)
     {
         return Ok(_adminService.Create(request));
     }
+
     [HttpPut("{id}")]
+    [Authorize(Roles = "SysAdmin")]
+
     public IActionResult Update([FromRoute] int id, [FromBody] AdminUpdateRequest request)
     {
         try
@@ -104,6 +78,8 @@ public class AdminController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "SysAdmin")]
+
     public IActionResult Delete([FromRoute] int id)
     {
         try

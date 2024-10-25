@@ -11,6 +11,8 @@ namespace Web.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 
+
+
 public class ProductController : ControllerBase
 {
     private readonly IProductService _productService;
@@ -20,6 +22,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
+
     public ActionResult<List<ProductDto>> GetAll()
     {
         return _productService.GetAll();
@@ -41,6 +44,8 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "SysAdmin,Admin")]
+
     public IActionResult Create([FromBody] ProductCreateRequest request)
     {
         try
@@ -56,6 +61,8 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "SysAdmin,Admin")]
+
     public IActionResult Update(int id, ProductUpdateRequest request)
     {
         try
@@ -71,6 +78,8 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Roles = "SysAdmin,Admin")]
+
     public IActionResult Delete(int id)
     {
         try

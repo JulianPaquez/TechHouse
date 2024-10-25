@@ -10,6 +10,7 @@ namespace Web.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
+
     public class ClientController : ControllerBase
     {
 
@@ -21,6 +22,8 @@ namespace Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "SysAdmin,Admin")]
+
         public IActionResult Create(ClientCreateRequest request)
         {
             return Ok(_service.Create(request));
@@ -33,6 +36,7 @@ namespace Web.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "SysAdmin,Admin")]
         public ActionResult<ClientDto> GetById(int id)
         {
             var client = _service.GetById(id);
@@ -44,6 +48,8 @@ namespace Web.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "SysAdmin,Admin")]
+
         public IActionResult Update(int id, ClientUpdateRequest request)
         {
 
@@ -58,6 +64,7 @@ namespace Web.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "SysAdmin,Admin")]
         public IActionResult Delete(int id)
         {
             try
