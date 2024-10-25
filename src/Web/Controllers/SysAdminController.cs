@@ -12,7 +12,6 @@ namespace Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "SysAdmin")]
 
 
 public class SysAdminController : ControllerBase
@@ -24,6 +23,7 @@ public class SysAdminController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "SysAdmin")]
 
     public ActionResult<List<SysAdminDto>> GetAll()
     {
@@ -31,6 +31,7 @@ public class SysAdminController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "SysAdmin")]
 
     public ActionResult<SysAdminDto> GetByid(int id)
     {
@@ -46,6 +47,7 @@ public class SysAdminController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "SysAdmin")]
 
     public IActionResult Create(SysAdminCreateRequest request)
     {
@@ -53,6 +55,7 @@ public class SysAdminController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "SysAdmin")]
 
     public IActionResult Update(int id, SysAdminUpdateRequest request)
     {
@@ -68,6 +71,8 @@ public class SysAdminController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "SysAdmin")]
+
     public IActionResult Delete(int id)
     {
         try
