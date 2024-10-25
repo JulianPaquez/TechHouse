@@ -4,7 +4,7 @@ namespace Application.Models.Request;
 
 public class ProductUpdateRequest
 {
-    public string Name {get;set;}
-    public int QuantityStock{get;set;}
-    public float Price{get;set;}
+    public string Name {get;set;} = string.Empty;
+    public int Stock{get;set;}
+    public decimal Price{get;set;}
 }

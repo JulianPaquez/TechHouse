@@ -71,6 +71,9 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 
+builder.Services.AddScoped<ISaleServices, SaleServices>();
+builder.Services.AddScoped<ISaleDetailsService, SaleDetailsService>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.Configure<AuthenticationServiceOptions>(
     builder.Configuration.GetSection(AuthenticationServiceOptions.AuthenticationService)
@@ -85,6 +88,9 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
 
 builder.Services.AddScoped<IBaseRepository<User>, EfRepository<User>>();
+
+builder.Services.AddScoped<ISaleRepository, SaleRepository>();
+builder.Services.AddScoped<ISaleDetailsRepository, SaleDetailsRepository>();
 
 
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();

@@ -11,9 +11,8 @@ namespace Application.Models
     {
         public int Id { get; set; }
         public DateTime DateTime { get; set; }
-        public int TotalSaleAmount { get; set; }
-        public string ProductSale { get; set; }
-        public int Amount { get; set; }
+        public decimal TotalSaleAmount { get; set; } = 0;
+        public string ProductSale { get; set; }  // Nuevo campo para los nombres de productos
 
         public static SaleDto Create(Sale sale) 
         {
@@ -22,16 +21,13 @@ namespace Application.Models
                 Id = sale.Id,
                 DateTime = sale.DateTime,
                 TotalSaleAmount = sale.TotalSaleAmount,
-                ProductSale = sale.ProductSale,
-                Amount = sale.Amount,
+                ProductSale = sale.ProductSale,  // Asignar el nombre de productos
             };
-
         }
+
         public static List<SaleDto> CreateList(IEnumerable<Sale> sales)
         {
-
             return sales.Select(s => Create(s)).ToList();
         }
     }
-
 }

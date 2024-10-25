@@ -33,6 +33,7 @@ public class SysAdminController : ControllerBase
     [HttpGet("{id}")]
     [Authorize(Roles = "SysAdmin")]
 
+
     public ActionResult<SysAdminDto> GetByid(int id)
     {
         try
@@ -49,6 +50,7 @@ public class SysAdminController : ControllerBase
     [HttpPost]
     [Authorize(Roles = "SysAdmin")]
 
+
     public IActionResult Create(SysAdminCreateRequest request)
     {
         return Ok(_sysAdminService.Create(request));
@@ -56,6 +58,7 @@ public class SysAdminController : ControllerBase
 
     [HttpPut("{id}")]
     [Authorize(Roles = "SysAdmin")]
+
 
     public IActionResult Update(int id, SysAdminUpdateRequest request)
     {

@@ -11,4 +11,6 @@ public interface IProductService
     void Create(ProductCreateRequest request);
     void Update(int id,ProductUpdateRequest request);
     void Delete(int id);
+    void ReduceStock(int ProductId, int Stock);
+    ProductDto GetByName(string name);
 }

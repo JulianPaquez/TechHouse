@@ -17,9 +17,9 @@ namespace Application.Services
             var newClient = new Client(
             request.Name,
             request.LastName,
-            request.UserName,
             request.Email,
             request.Password,
+            request.UserName,
             request.Address
             );
             _clientRepository.Create(newClient);
