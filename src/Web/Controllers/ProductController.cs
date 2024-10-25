@@ -20,14 +20,12 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Sysadmin")]
     public ActionResult<List<ProductDto>> GetAll()
     {
         return _productService.GetAll();
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = "Sysadmin")]
 
     public ActionResult<ProductDto> GetById(int id)
     {
@@ -43,7 +41,6 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Sysadmin")]
     public IActionResult Create([FromBody] ProductCreateRequest request)
     {
         try
@@ -59,7 +56,6 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Roles = "Sysadmin")]
     public IActionResult Update(int id, ProductUpdateRequest request)
     {
         try
@@ -75,7 +71,6 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete]
-    [Authorize(Roles = "Sysadmin")]
     public IActionResult Delete(int id)
     {
         try

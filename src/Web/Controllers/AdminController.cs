@@ -18,7 +18,7 @@ namespace Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-
+[Authorize(Roles = "SysAdmin")]
 
 public class AdminController : ControllerBase
 {
@@ -30,14 +30,12 @@ public class AdminController : ControllerBase
 
 
     [HttpGet]
-    [Authorize(Roles = "Sysadmin")]
     public ActionResult<List<AdminDto>> GetAll()
     {
         return _adminService.GetAll();
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = "Sysadmin")]
     public ActionResult<AdminDto> GetByid([FromRoute] int id)
     {
         try
@@ -53,7 +51,6 @@ public class AdminController : ControllerBase
     }
 
     [HttpGet("clients")]
-    [Authorize(Roles = "Sysadmin")]
     public ActionResult<List<ClientDto>> GetAllClients()
     {
         try
@@ -71,7 +68,7 @@ public class AdminController : ControllerBase
 
     // Endpoint para obtener todos los productos
     [HttpGet("products")]
-    [Authorize(Roles = "Sysadmin")]
+
     public ActionResult<List<ProductDto>> GetAllProducts()
     {
         try
@@ -87,14 +84,12 @@ public class AdminController : ControllerBase
         }
     }
     [HttpPost]
-    [Authorize(Roles = "Sysadmin")]
 
     public IActionResult Create([FromBody] AdminCreateRequest request)
     {
         return Ok(_adminService.Create(request));
     }
     [HttpPut("{id}")]
-    [Authorize(Roles = "Sysadmin")]
     public IActionResult Update([FromRoute] int id, [FromBody] AdminUpdateRequest request)
     {
         try
@@ -109,7 +104,6 @@ public class AdminController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Sysadmin")]
     public IActionResult Delete([FromRoute] int id)
     {
         try

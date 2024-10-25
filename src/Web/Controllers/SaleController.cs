@@ -21,7 +21,6 @@ namespace Web.Controllers
             return _saleServices.GetAll();
         }
         [HttpGet("{id}")]
-        [Authorize(Roles = "Sysadmin")]
         public ActionResult<SaleDto> GetById(int id)
         {
             try
@@ -34,13 +33,11 @@ namespace Web.Controllers
             }
         }
         [HttpPost]
-        [Authorize(Roles = "Sysadmin")]
         public IActionResult Create(SaleCreateRequest request)
         {
             return Ok(_saleServices.Create(request));
         }
         [HttpPut("{id}")]
-        [Authorize(Roles = "Sysadmin")]
         public IActionResult Update(int id, [FromBody] SaleUpdateRequest request)
         {
             try
@@ -54,7 +51,6 @@ namespace Web.Controllers
             }
         }
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Sysadmin")]
         public IActionResult Delete(int id)
         {
             try

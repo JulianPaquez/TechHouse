@@ -22,6 +22,7 @@ using Microsoft.IdentityModel.Tokens;
 using Application.Interfaces;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
 
 
 
@@ -72,7 +73,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.Configure<AuthenticationServiceOptions>(
-    builder.Configuration.GetSection(AuthenticationServiceOptions.AuthService)
+    builder.Configuration.GetSection(AuthenticationServiceOptions.AuthenticationService)
 );
 
 #endregion
@@ -111,15 +112,12 @@ builder.Services.AddAuthentication("Bearer")
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["AuthService:Issuer"], // Aquí está buscando en "AuthService"
-            ValidAudience = builder.Configuration["AuthService:Audience"], // Aquí está buscando en "AuthService"
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["AuthService:SecretForKey"])) // Aquí está buscando en "AuthService"
+            ValidIssuer = builder.Configuration["AuthenticationService:Issuer"],
+            ValidAudience = builder.Configuration["AuthenticationService:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["AuthenticationService:SecretForKey"]))
         };
-
-        
-    });
-
-
+    }
+);
 
 var app = builder.Build();
 

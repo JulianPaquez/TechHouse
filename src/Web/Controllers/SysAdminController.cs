@@ -22,7 +22,6 @@ public class SysAdminController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "SysAdmin")]
 
     public ActionResult<List<SysAdminDto>> GetAll()
     {
@@ -30,7 +29,6 @@ public class SysAdminController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = "SysAdmin")]
 
     public ActionResult<SysAdminDto> GetByid(int id)
     {
@@ -46,7 +44,6 @@ public class SysAdminController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
 
     public IActionResult Create(SysAdminCreateRequest request)
     {
@@ -54,7 +51,7 @@ public class SysAdminController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize]
+
     public IActionResult Update(int id, SysAdminUpdateRequest request)
     {
         try
@@ -69,7 +66,6 @@ public class SysAdminController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "SysAdmin")]
     public IActionResult Delete(int id)
     {
         try
