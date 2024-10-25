@@ -8,7 +8,7 @@ public class ProductDto
     public int Id {get;set;}
     public string Name {get;set;}
     public int QuantityStock {get;set;}
-    public float Price {get;set;}
+    public decimal Price {get;set;}
 
     public static ProductDto Create(Product product)
     {
@@ -16,7 +16,7 @@ public class ProductDto
         {
             Id = product.Id,
             Name = product.Name,
-            QuantityStock = product.QuantityStock,
+            QuantityStock = product.Stock,
             Price = product.Price,
         };
     }
@@ -25,14 +25,15 @@ public class ProductDto
     {
          if (products == null || !products.Any())
         {
-            throw new Exception("No products available to map.");
+            return null;
+            //corregir
         }
 
         return products.Select(p => new ProductDto
         {
             Id = p.Id,
             Name = p.Name,
-            QuantityStock = p.QuantityStock,
+            QuantityStock = p.Stock,
             Price = p.Price,
             
         }).ToList();

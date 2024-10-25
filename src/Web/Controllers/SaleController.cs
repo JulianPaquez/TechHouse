@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class SaleController : ControllerBase
     {
         private readonly ISaleServices _saleServices;
@@ -34,7 +34,9 @@ namespace Web.Controllers
         [HttpPost]
         public IActionResult Create(SaleCreateRequest request)
         {
-            return Ok(_saleServices.Create(request));     
+            
+            _saleServices.Create(request);
+            return Ok("Se creo la venta con exito");
         }
         [HttpPut("{id}")]
         public IActionResult Update(int id,[FromBody]SaleUpdateRequest request)
