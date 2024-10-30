@@ -9,9 +9,8 @@ namespace Application.Models.Request
     public class SaleUpdateRequest
     {
         public DateTime DateTime { get; set; }
-        public decimal TotalSaleAmount { get; set; }
         public string ProductSale { get; set; }
-        public decimal Amount { get; set; }
+        public int ProductQuantity { get; set; }
 
     }
 }

@@ -12,5 +12,7 @@ public interface IProductService
     void Update(int id,ProductUpdateRequest request);
     void Delete(int id);
     void ReduceStock(int ProductId, int Stock);
+    void IncreaseStock(int productId, int quantity);
+
     ProductDto GetByName(string name);
 }

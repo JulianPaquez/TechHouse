@@ -41,6 +41,7 @@ namespace Application.Services
         {
             var saleDetailsList = new List<SaleDetails>();
             var productNames = new List<string>();
+            int totalProductQuantity = 0; // Variable para almacenar la cantidad total de productos
 
             foreach (var productSaleRequest in request.ProductSales)
             {
@@ -73,6 +74,7 @@ namespace Application.Services
 
                 saleDetailsList.Add(saleDetail);
                 productNames.Add(product.Name);
+                totalProductQuantity += productSaleRequest.Stock; // Sumar la cantidad vendida de este producto
             }
 
             // Calcular el total de la venta
@@ -81,8 +83,8 @@ namespace Application.Services
             // Concatenar los nombres de los productos en una cadena separada por comas
             var productNamesString = string.Join(", ", productNames);
 
-            // Crear la venta incluyendo los nombres de los productos
-            var sale = new Sale(request.DateTime, totalAmount, productNamesString);
+            // Crear la venta incluyendo los nombres de los productos y la cantidad total
+            var sale = new Sale(request.DateTime, totalAmount, productNamesString, totalProductQuantity);
 
             // Agregar los detalles de venta a la venta
             foreach (var detail in saleDetailsList)
@@ -93,55 +95,7 @@ namespace Application.Services
             _saleRepository.Create(sale);
         }
 
-        // public void Create(SaleCreateRequest request)
-        // {
-        //     var saleDetailsList = new List<SaleDetails>();
 
-        //     // Crear una lista de nombres de productos vendidos
-        //     var productNames = new List<string>();
-
-        //     foreach (var productSaleRequest in request.ProductSales)
-        //     {
-        //         // Buscar el producto por nombre
-        //         var product = _productService.GetByName(productSaleRequest.Name);
-
-        //         if (product == null)
-        //         {
-        //             throw new Exception($"Producto '{productSaleRequest.Name}' no encontrado.");
-        //         }
-
-        //         // Validar si el producto tiene suficiente stock
-        //         if (product.QuantityStock < productSaleRequest.Stock)
-        //         {
-        //             throw new Exception($"Stock insuficiente para el producto '{product.Name}'. Stock disponible: {product.QuantityStock}");
-        //         }
-
-        //         // Restar stock del producto
-        //         _productService.ReduceStock(product.Id, productSaleRequest.Stock);
-
-        //         // Crear los detalles de la venta
-        //         var saleDetail = new SaleDetails
-        //         {
-        //             ProductId = product.Id,
-        //             Stock = productSaleRequest.Stock
-        //         };
-
-        //         saleDetailsList.Add(saleDetail);
-
-        //         // Agregar el nombre del producto a la lista de nombres
-        //         productNames.Add(product.Name);
-        //     }
-
-        //     // Calcular el total de la venta
-        //     var totalAmount = CalculateTotalSaleAmount(saleDetailsList);
-
-        //     // Concatenar los nombres de los productos en una cadena separada por comas
-        //     var productNamesString = string.Join(", ", productNames);
-
-        //     // Crear la venta incluyendo los nombres de los productos
-        //     var sale = new Sale(request.DateTime, totalAmount, productNamesString);
-        //     _saleRepository.Create(sale);
-        // }
 
         public void Update(int id, SaleUpdateRequest request)
         {
@@ -151,11 +105,65 @@ namespace Application.Services
                 throw new Exception("Venta no encontrada");
             }
 
+            // Revertir el stock de los productos en la venta original
+            foreach (var detail in sale.SaleDetails)
+            {
+                var originalProduct = _productService.GetById(detail.ProductId);
+                _productService.IncreaseStock(originalProduct.Id, detail.Stock);
+            }
+
+            // Limpiar los detalles de venta actuales para agregar los nuevos
+            sale.SaleDetails.Clear();
+
+            // Crear una nueva lista para los detalles de venta actualizados
+            var saleDetailsList = new List<SaleDetails>();
+            var productNames = new List<string>();
+
+            // Procesar los productos de la solicitud de actualización
+            var product = _productService.GetByName(request.ProductSale);
+            if (product == null)
+            {
+                throw new Exception($"Producto '{request.ProductSale}' no encontrado.");
+            }
+
+            // Validar y actualizar el stock del producto
+            if (product.QuantityStock < request.ProductQuantity)
+            {
+                throw new Exception($"Stock insuficiente para el producto '{product.Name}'. Stock disponible: {product.QuantityStock}");
+            }
+            _productService.ReduceStock(product.Id, request.ProductQuantity);
+
+            // Crear y agregar el nuevo detalle de venta
+            var saleDetail = new SaleDetails
+            {
+                ProductId = product.Id,
+                Stock = request.ProductQuantity,
+                ProductName = product.Name,
+                ProductPrice = product.Price,
+                TotalAmount = product.Price * request.ProductQuantity
+            };
+
+            saleDetailsList.Add(saleDetail);
+            productNames.Add(product.Name);
+
+            // Calcular el nuevo monto total de la venta
+            var totalAmount = CalculateTotalSaleAmount(saleDetailsList);
+            var productNamesString = string.Join(", ", productNames);
+
+            // Actualizar los datos de la venta
             sale.DateTime = request.DateTime;
-            sale.TotalSaleAmount = request.TotalSaleAmount;
+            sale.TotalSaleAmount = totalAmount;
+            sale.ProductSale = productNamesString;
+
+            // Agregar los detalles de venta actualizados a la venta
+            foreach (var detail in saleDetailsList)
+            {
+                sale.SaleDetails.Add(detail);
+            }
 
             _saleRepository.Update(sale);
         }
+
 
         public void Delete(int id)
         {

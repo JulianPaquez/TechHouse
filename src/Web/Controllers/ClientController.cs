@@ -30,6 +30,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "SysAdmin,Admin")]
         public ActionResult<List<ClientDto>> GetAll()
         {
             return _service.GetAll();

@@ -90,5 +90,18 @@ namespace Application.Services
             product.Stock -= quantity;
             _productRepository.Update(product);
         }
+
+        public void IncreaseStock(int productId, int quantity)
+        {
+            var product = _productRepository.GetById(productId);
+            if (product == null)
+            {
+                throw new Exception("Producto no encontrado");
+            }
+
+            product.Stock += quantity;
+            _productRepository.Update(product);
+        }
+
     }
 }
