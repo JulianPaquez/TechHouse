@@ -1,6 +1,5 @@
 using Application.Models;
 using Domain.Entities;
-using Domain.Enums;
 using Domain.Interfaces;
 
 namespace Application.Services
@@ -18,9 +17,9 @@ namespace Application.Services
             var newClient = new Client(
             request.Name,
             request.LastName,
-            request.UserName,
             request.Email,
             request.Password,
+            request.UserName,
             request.Address
             );
             _clientRepository.Create(newClient);
@@ -32,7 +31,7 @@ namespace Application.Services
             var updClient = _clientRepository.GetById(id);
             if (updClient == null)
             {
-                return false; 
+                return false;
             }
 
             updClient.Name = request.Name;
@@ -43,7 +42,7 @@ namespace Application.Services
 
             _clientRepository.Update(updClient);
 
-            return true; 
+            return true;
         }
 
         public ClientDto GetById(int id)
@@ -51,18 +50,18 @@ namespace Application.Services
             var client = _clientRepository.GetById(id);
             if (client == null)
             {
-                throw new Exception("Client not found");
+                return null;
             }
             return new ClientDto
-                {
-                    Id = client.Id,
-                    Name = client.Name,
-                    LastName = client.LastName,
-                    Username = client.Username,
-                    Email = client.Email,
-                    Adress = client.Adress,
-                    UserType = UserType.Client,
-                };
+            {
+                Id = client.Id,
+                Name = client.Name,
+                LastName = client.LastName,
+                Username = client.Username,
+                Email = client.Email,
+                Adress = client.Adress,
+                UserType = "Client",
+            };
         }
 
         public List<ClientDto> GetAll()

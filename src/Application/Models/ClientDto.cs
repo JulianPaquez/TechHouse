@@ -1,11 +1,10 @@
 using System.Collections.Generic; // Necesario para List e IEnumerable
 using System.Linq; // Necesario para usar Select
 using Domain.Entities;
-using Domain.Enums;
 
 namespace Application.Models
 {
-    public class ClientDto 
+    public class ClientDto
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -13,8 +12,8 @@ namespace Application.Models
         public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Adress { get; set; } = string.Empty;
-        public UserType UserType {get; set;}
-    
+        public string UserType { get; set; }
+
         public static ClientDto Create(Client client)
         {
             return new ClientDto
@@ -25,7 +24,7 @@ namespace Application.Models
                 Email = client.Email,
                 Username = client.Username,
                 Adress = client.Adress,
-                UserType = UserType.Client
+                UserType = "Client"
             };
         }
 

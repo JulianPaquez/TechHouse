@@ -1,5 +1,4 @@
 using Domain.Entities;
-using Domain.Enums;
 
 namespace Domain.Entities;
 
@@ -13,7 +12,7 @@ public class Admin : User
         Email = email;
         Password = password;
         Username = username;
-        UserType = UserType.Admin;
+        UserType = "Admin";
     }
-    public Admin() {  }
+    public Admin() { }
 }

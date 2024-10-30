@@ -1,10 +1,16 @@
+using Application.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using Domain.Entities;
-using Application;
-using Appication.Interfaces;
-using Application.Request;
+using Application.Interfaces;
+using Application.Models.Request;
 using Application.Models;
+using System;
+using System.Collections.Generic;
+
+using Microsoft.AspNetCore.Authorization;
+using Appication.Interfaces;
+using Application;
+using Application.Request;
 
 
 namespace Web.Controllers;
@@ -12,6 +18,7 @@ namespace Web.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+
 
 public class AdminController : ControllerBase
 {
@@ -23,15 +30,15 @@ public class AdminController : ControllerBase
 
 
     [HttpGet]
-
+    [Authorize(Roles = "SysAdmin, Admin")]
     public ActionResult<List<AdminDto>> GetAll()
     {
         return _adminService.GetAll();
     }
 
     [HttpGet("{id}")]
-
-    public ActionResult<AdminDto> GetByid(int id)
+    [Authorize(Roles = "SysAdmin,Admin")]
+    public ActionResult<AdminDto> GetByid([FromRoute] int id)
     {
         try
         {
@@ -45,46 +52,19 @@ public class AdminController : ControllerBase
 
     }
 
-    [HttpGet("clients")]
-    public ActionResult<List<ClientDto>> GetAllClients()
-    {
-        try
-    {
-        var result = _adminService.GetAllClients();
-        return Ok(result);
-    }
-    catch (Exception ex)
-    {
-        // Log error details
-        Console.WriteLine("Error retrieving products: " + ex.Message);
-        return BadRequest(new { error = ex.Message, stackTrace = ex.StackTrace });
-    }
-    }
 
-    // Endpoint para obtener todos los productos
-    [HttpGet("products")]
-    public ActionResult<List<ProductDto>> GetAllProducts()
-    {
-         try
-    {
-        var result = _adminService.GetAllProducts();
-        return Ok(result);
-    }
-    catch (Exception ex)
-    {
-        // Log error details
-        Console.WriteLine("Error retrieving products: " + ex.Message);
-        return BadRequest(new { error = ex.Message, stackTrace = ex.StackTrace });
-    }
-    }
     [HttpPost]
+    [Authorize(Roles = "SysAdmin")]
 
-    public IActionResult Create(AdminCreateRequest request)
+    public IActionResult Create([FromBody] AdminCreateRequest request)
     {
         return Ok(_adminService.Create(request));
     }
+
     [HttpPut("{id}")]
-    public IActionResult Update(int id, AdminUpdateRequest request)
+    [Authorize(Roles = "SysAdmin")]
+
+    public IActionResult Update([FromRoute] int id, [FromBody] AdminUpdateRequest request)
     {
         try
         {
@@ -98,7 +78,9 @@ public class AdminController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    [Authorize(Roles = "SysAdmin")]
+
+    public IActionResult Delete([FromRoute] int id)
     {
         try
         {
@@ -114,3 +96,4 @@ public class AdminController : ControllerBase
 
     }
 }
+

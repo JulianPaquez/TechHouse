@@ -22,7 +22,7 @@ public class AdminService : IAdminService
     }
     public Admin Create(AdminCreateRequest request)
     {
-        var newAdmin = new Admin(request.Name, request.Lastname, request.Username, request.Password, request.Email);
+        var newAdmin = new Admin(request.Name, request.Lastname,  request.Email, request.Password,request.Username);
 
         _adminRepository.Create(newAdmin);
 

@@ -2,6 +2,7 @@
 using Application.Models;
 using Application.Models.Request;
 using Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Controllers;
 
@@ -17,12 +18,16 @@ namespace TechHouse.Web.Controllers
             _saleDetailsService = saleDetailsService;
         }
         [HttpGet]
-        public ActionResult<List<SaleDetailsDto>> GetAll() 
+
+
+        public ActionResult<List<SaleDetailsDto>> GetAll()
         {
             return _saleDetailsService.GetAll();
         }
         [HttpPost]
-        public  IActionResult Create([FromBody] SaleDetailsCreateRequest request)
+        [Authorize(Roles = "SysAdmin,Admin")]
+
+        public IActionResult Create([FromBody] SaleDetailsCreateRequest request)
         {
             try
             {

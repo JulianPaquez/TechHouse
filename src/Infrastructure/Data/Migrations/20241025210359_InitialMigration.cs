@@ -52,7 +52,7 @@ namespace Infrastructure.Data.Migrations
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Username = table.Column<string>(type: "TEXT", nullable: false),
                     Password = table.Column<string>(type: "TEXT", nullable: false),
-                    UserType = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserType = table.Column<string>(type: "TEXT", nullable: false),
                     Discriminator = table.Column<string>(type: "TEXT", maxLength: 8, nullable: false),
                     Adress = table.Column<string>(type: "TEXT", nullable: true)
                 },

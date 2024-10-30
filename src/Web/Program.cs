@@ -21,6 +21,8 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Application.Interfaces;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
 
 
 
@@ -31,8 +33,36 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(setupAction =>
+{
+    setupAction.AddSecurityDefinition("TechHouseBearerAuth", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        Description = "Aca pegar el token generado al loguearse."
+    });
 
+    setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "TechHouseBearerAuth" // Tiene que coincidir con el id de la definición arriba
+                }
+            },
+            new List<string>()
+        }
+    });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+    // Si puedes configurar el archivo XML correctamente, descomenta la siguiente línea
+    // setupAction.IncludeXmlComments(xmlPath);
+});
 
 #region Services
 builder.Services.AddScoped<ISysAdminService, SysAdminService>();
@@ -46,7 +76,7 @@ builder.Services.AddScoped<ISaleDetailsService, SaleDetailsService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.Configure<AuthenticationServiceOptions>(
-    builder.Configuration.GetSection(AuthenticationServiceOptions.AuthService)
+    builder.Configuration.GetSection(AuthenticationServiceOptions.AuthenticationService)
 );
 
 #endregion
@@ -88,13 +118,12 @@ builder.Services.AddAuthentication("Bearer")
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["AuthService:Issuer"], // Aquí está buscando en "AuthService"
-            ValidAudience = builder.Configuration["AuthService:Audience"], // Aquí está buscando en "AuthService"
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["AuthService:SecretForKey"])) // Aquí está buscando en "AuthService"
+            ValidIssuer = builder.Configuration["AuthenticationService:Issuer"],
+            ValidAudience = builder.Configuration["AuthenticationService:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["AuthenticationService:SecretForKey"]))
         };
-    });
-
-
+    }
+);
 
 var app = builder.Build();
 
@@ -107,6 +136,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

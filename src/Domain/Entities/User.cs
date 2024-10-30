@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Domain.Enums;
 using Domain.Interfaces;
 
 namespace Domain.Entities;
 
-public abstract class  User 
+public abstract class User
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -16,11 +15,11 @@ public abstract class  User
 
     public string LastName { get; set; } = string.Empty;
 
-    public string Email { get; set; } = string.Empty;   
+    public string Email { get; set; } = string.Empty;
 
     public string Username { get; set; } = string.Empty;
 
     public string Password { get; set; } = string.Empty;
-    
-    public UserType UserType {get; set;}
+
+    public string UserType { get; set; }
 }
