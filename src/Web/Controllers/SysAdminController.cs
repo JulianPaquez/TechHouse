@@ -34,7 +34,7 @@ public class SysAdminController : ControllerBase
     [Authorize(Roles = "SysAdmin")]
 
 
-    public ActionResult<SysAdminDto> GetByid(int id)
+    public ActionResult<SysAdminDto> GetByid([FromRoute] int id)
     {
         try
         {
@@ -51,7 +51,7 @@ public class SysAdminController : ControllerBase
     [Authorize(Roles = "SysAdmin")]
 
 
-    public IActionResult Create(SysAdminCreateRequest request)
+    public IActionResult Create([FromBody] SysAdminCreateRequest request)
     {
         return Ok(_sysAdminService.Create(request));
     }
@@ -60,7 +60,7 @@ public class SysAdminController : ControllerBase
     [Authorize(Roles = "SysAdmin")]
 
 
-    public IActionResult Update(int id, SysAdminUpdateRequest request)
+    public IActionResult Update([FromRoute] int id, [FromBody] SysAdminUpdateRequest request)
     {
         try
         {
@@ -76,7 +76,7 @@ public class SysAdminController : ControllerBase
     [HttpDelete("{id}")]
     [Authorize(Roles = "SysAdmin")]
 
-    public IActionResult Delete(int id)
+    public IActionResult Delete([FromRoute] int id)
     {
         try
         {

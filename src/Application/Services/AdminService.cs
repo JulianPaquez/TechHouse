@@ -14,7 +14,7 @@ public class AdminService : IAdminService
     private readonly IAdminRepository _adminRepository;
     private readonly IClientService _clientService;
     private readonly IProductRepository _productService;
-    public AdminService(IAdminRepository adminRepository,IClientService clientService,IProductRepository productService)
+    public AdminService(IAdminRepository adminRepository, IClientService clientService, IProductRepository productService)
     {
         _adminRepository = adminRepository;
         _clientService = clientService;
@@ -22,7 +22,7 @@ public class AdminService : IAdminService
     }
     public Admin Create(AdminCreateRequest request)
     {
-        var newAdmin = new Admin(request.Name, request.Lastname,  request.Email, request.Password,request.Username);
+        var newAdmin = new Admin(request.Name, request.Lastname, request.Email, request.Password, request.Username);
 
         _adminRepository.Create(newAdmin);
 
@@ -64,18 +64,7 @@ public class AdminService : IAdminService
 
 
     }
-    // Método para obtener todos los clientes
-    public List<ClientDto> GetAllClients()
-    {
-        return _clientService.GetAll(); 
-    }
 
-    // Método para obtener todos los productos
-    public List<ProductDto> GetAllProducts()
-    {
-        var list = _productService.GetAll();
-        return ProductDto.CreateList(list);
-    }
 
     public List<AdminDto> GetAll()
     {
@@ -94,15 +83,5 @@ public class AdminService : IAdminService
         _adminRepository.Delete(admin);
 
 
-    }
-
-    object? IAdminService.GetAllClients()
-    {
-        throw new NotImplementedException();
-    }
-
-    object? IAdminService.GetAllProducts()
-    {
-        throw new NotImplementedException();
     }
 }

@@ -24,7 +24,7 @@ namespace Web.Controllers
         }
         [HttpGet("{id}")]
         [Authorize(Roles = "SysAdmin,Admin,Client")]
-        public ActionResult<SaleDto> GetById(int id)
+        public ActionResult<SaleDto> GetById([FromRoute] int id)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Web.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "SysAdmin,Admin,Client")]
-        public IActionResult Create(SaleCreateRequest request)
+        public IActionResult Create([FromBody] SaleCreateRequest request)
         {
 
             _saleServices.Create(request);
@@ -45,7 +45,7 @@ namespace Web.Controllers
         }
         [HttpPut("{id}")]
         [Authorize(Roles = "SysAdmin,Admin,Client")]
-        public IActionResult Update(int id, [FromBody] SaleUpdateRequest request)
+        public IActionResult Update([FromRoute] int id, [FromBody] SaleUpdateRequest request)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace Web.Controllers
         }
         [HttpDelete("{id}")]
         [Authorize(Roles = "SysAdmin,Admin,Client")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete([FromRoute] int id)
         {
             try
             {

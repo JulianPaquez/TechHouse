@@ -30,7 +30,7 @@ public class ProductController : ControllerBase
 
     [HttpGet("{id}")]
 
-    public ActionResult<ProductDto> GetById(int id)
+    public ActionResult<ProductDto> GetById([FromRoute] int id)
     {
         try
         {
@@ -63,7 +63,7 @@ public class ProductController : ControllerBase
     [HttpPut("{id}")]
     [Authorize(Roles = "SysAdmin,Admin")]
 
-    public IActionResult Update(int id, ProductUpdateRequest request)
+    public IActionResult Update([FromRoute] int id, [FromBody] ProductUpdateRequest request)
     {
         try
         {
@@ -80,7 +80,7 @@ public class ProductController : ControllerBase
     [HttpDelete]
     [Authorize(Roles = "SysAdmin,Admin")]
 
-    public IActionResult Delete(int id)
+    public IActionResult Delete([FromRoute] int id)
     {
         try
         {

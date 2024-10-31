@@ -24,7 +24,7 @@ namespace Web.Controllers
         [HttpPost]
         [Authorize(Roles = "SysAdmin,Admin")]
 
-        public IActionResult Create(ClientCreateRequest request)
+        public IActionResult Create([FromBody] ClientCreateRequest request)
         {
             return Ok(_service.Create(request));
         }
@@ -38,7 +38,7 @@ namespace Web.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = "SysAdmin,Admin")]
-        public ActionResult<ClientDto> GetById(int id)
+        public ActionResult<ClientDto> GetById([FromRoute] int id)
         {
             var client = _service.GetById(id);
             if (client == null)
@@ -51,7 +51,7 @@ namespace Web.Controllers
         [HttpPut("{id}")]
         [Authorize(Roles = "SysAdmin,Admin")]
 
-        public IActionResult Update(int id, ClientUpdateRequest request)
+        public IActionResult Update([FromBody] int id, [FromRoute] ClientUpdateRequest request)
         {
 
             var result = _service.Update(id, request);
@@ -66,7 +66,7 @@ namespace Web.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "SysAdmin,Admin")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete([FromRoute] int id)
         {
             try
             {
