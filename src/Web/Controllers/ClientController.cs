@@ -51,7 +51,7 @@ namespace Web.Controllers
         [HttpPut("{id}")]
         [Authorize(Roles = "SysAdmin,Admin")]
 
-        public IActionResult Update([FromBody] int id, [FromRoute] ClientUpdateRequest request)
+        public IActionResult Update([FromRoute] int id, [FromBody] ClientUpdateRequest request)
         {
 
             var result = _service.Update(id, request);
