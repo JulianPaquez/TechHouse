@@ -77,7 +77,7 @@ public class ProductController : ControllerBase
         }
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [Authorize(Roles = "SysAdmin,Admin")]
 
     public IActionResult Delete([FromRoute] int id)

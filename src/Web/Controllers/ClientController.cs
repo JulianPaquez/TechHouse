@@ -22,7 +22,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "SysAdmin,Admin")]
+        //[Authorize(Roles = "SysAdmin,Admin")]
 
         public IActionResult Create([FromBody] ClientCreateRequest request)
         {
@@ -30,7 +30,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "SysAdmin,Admin")]
+        //[Authorize(Roles = "SysAdmin,Admin")]
         public ActionResult<List<ClientDto>> GetAll()
         {
             return _service.GetAll();
@@ -49,7 +49,7 @@ namespace Web.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "SysAdmin,Admin")]
+        [Authorize(Roles = "SysAdmin,Admin, Client")]
 
         public IActionResult Update([FromRoute] int id, [FromBody] ClientUpdateRequest request)
         {
