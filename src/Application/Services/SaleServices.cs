@@ -112,28 +112,28 @@ namespace Application.Services
                 _productService.IncreaseStock(originalProduct.Id, detail.Stock);
             }
 
-            // Limpiar los detalles de venta actuales para agregar los nuevos
+            
             sale.SaleDetails.Clear();
 
-            // Crear una nueva lista para los detalles de venta actualizados
+            
             var saleDetailsList = new List<SaleDetails>();
             var productNames = new List<string>();
 
-            // Procesar los productos de la solicitud de actualización
+            
             var product = _productService.GetByName(request.ProductSale);
             if (product == null)
             {
                 throw new Exception($"Producto '{request.ProductSale}' no encontrado.");
             }
 
-            // Validar y actualizar el stock del producto
+            
             if (product.QuantityStock < request.ProductQuantity)
             {
                 throw new Exception($"Stock insuficiente para el producto '{product.Name}'. Stock disponible: {product.QuantityStock}");
             }
             _productService.ReduceStock(product.Id, request.ProductQuantity);
 
-            // Crear y agregar el nuevo detalle de venta
+            
             var saleDetail = new SaleDetails
             {
                 ProductId = product.Id,
@@ -146,16 +146,16 @@ namespace Application.Services
             saleDetailsList.Add(saleDetail);
             productNames.Add(product.Name);
 
-            // Calcular el nuevo monto total de la venta
+            
             var totalAmount = CalculateTotalSaleAmount(saleDetailsList);
             var productNamesString = string.Join(", ", productNames);
 
-            // Actualizar los datos de la venta
+           
             sale.DateTime = request.DateTime;
             sale.TotalSaleAmount = totalAmount;
             sale.ProductSale = productNamesString;
 
-            // Agregar los detalles de venta actualizados a la venta
+            
             foreach (var detail in saleDetailsList)
             {
                 sale.SaleDetails.Add(detail);
